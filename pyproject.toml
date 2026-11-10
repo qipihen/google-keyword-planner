@@ -1,0 +1,20 @@
+[build-system]
+requires = ["setuptools>=61.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "google-keyword-planner"
+version = "1.0.0"
+description = "Zero-dependency Google Suggest & Google Ads Keyword Intelligence Toolkit with Gefei SEO Decision Framework and KGR calculation."
+readme = "README.md"
+requires-python = ">=3.8"
+license = { text = "MIT" }
+authors = [
+    { name = "Open Source Community" }
+]
+dependencies = [
+    "requests>=2.28.0"
+]
+
+[project.scripts]
+keyword-planner = "run:main"

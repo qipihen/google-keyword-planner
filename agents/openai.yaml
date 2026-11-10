@@ -1,0 +1,3 @@
+display_name: Google Keyword Planner & SEO Intelligence
+short_description: Zero-setup Google keyword harvesting, Gefei KD, KGR, and article outline generator
+default_prompt: Use google-keyword-planner to harvest and evaluate keywords for [your topic]
