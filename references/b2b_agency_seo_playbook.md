@@ -34,10 +34,10 @@
 
 ---
 
-## 三、结合哥飞选词体系的 B 端实操 SOP
+## 三、B 端选词与意图集群实操 SOP
 
 ### 第一步：种子词深挖 (Seed Discovery)
-不要直接搜 `packaging`，输入精准品类词：
+不要直接搜宽泛大词，输入精准品类词：
 ```bash
 python run.py "airless bottle"
 ```
@@ -46,18 +46,17 @@ python run.py "airless bottle"
 - 采购决策词：`moq`, `cost`, `quote`, `rfq`, `lead time`, `catalog`
 - 选型参数词：`materials`, `specs`, `process`, `iso certified`, `standards`
 
-### 第二步：哥飞 KD 难度筛选 (Pick Low-Hanging Fruits)
-- 在生成的 CSV 报表中，优先筛选 **哥飞 KD <= 25** 的词。
+### 第二步：B2B-KD 难度筛选 (Pick Low-Hanging Fruits)
+- 在生成的 CSV 报表中，优先筛选 **B2B-KD <= 25** 的词。
 - 这类词通常是 4~6 个单词的精准长尾采购词。大厂、平台型聚合站（如 Alibaba、ThomasNet）只会用大目录页做大词，根本不会专门写一篇 3,000 字的长文深入解答这个具体的工艺与选型。
 - 新站只要发布一篇结构严谨的技术选型指南，极短时间内就能在 Google 占据前 3 名！
 
 ### 第三步：KGR 黄金法则突击 (KGR < 0.25)
 - 计算全网 `allintitle` 网页数量。若全网把该长尾词完整放到 `<title>` 里的网页少于 10 个，且该词有几十点精准采购搜索量，这就是无竞争的“捡钱词”。
 
-### 第四步：把文章大纲直接交付客户或内容编辑
-工具自动在 `output/content_plan_*.md` 生成了：
-- **方案一：B2B 采购寻源指南 (Buyer's Guide)**
-- **方案二：技术选型与工艺参数长文 (Technical Specification)**
-- **方案三：快速见效长尾文章 (Quick-Win Q&A)**
+### 第四步：输出 Pillar-Cluster 拓扑与文章大纲
+工具自动生成：
+- `output/topic_cluster_architecture_*.md`：全套支柱与集群内链拓扑地图
+- `output/content_plan_*.md`：采购寻源指南、选型参数指南与开荒词单
 
 乙方团队无需再花几小时构思标题与大纲，直接把大纲发给文案或海外写手填肉，生产力直接提升 5 倍以上！

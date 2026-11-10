@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
-哥飞 SEO 选词决策引擎 (结合 B2B 工业采购与高客单转化加权)
+B2B SEO 选词决策引擎 (结合 B2B 工业采购与高客单转化加权)
 """
 
 import re

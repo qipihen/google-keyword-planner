@@ -1,63 +1,60 @@
 ---
 name: google-keyword-planner
-description: "Harvest long-tail keyword ideas, evaluate Gefei KD difficulty and search intent, calculate KGR ratios, and generate SEO article outlines using Google Suggest and official Google Ads API without third-party dependencies."
+description: "Harvest B2B long-tail keywords, categorize B2B procurement search intent, evaluate B2B-KD difficulty, calculate KGR ratios, cluster keywords into topic clusters, and generate Pillar-Cluster content architecture."
 metadata:
-  short-description: Google keyword ideas, KD, KGR, and article outlines
+  short-description: B2B keyword clustering, Pillar-Cluster topology, and Google Ads metrics
 ---
 
-# Google Keyword Planner & SEO Intelligence
+# Google Keyword Planner & B2B SEO Intelligence
 
-Harvest long-tail keyword ideas, calculate Gefei-style Keyword Difficulty (KD), determine commercial search intent, compute KGR (Keyword Golden Ratio), and automatically generate click-worthy article outlines and FAQ topics.
+Harvest B2B long-tail keyword ideas, categorize search intent across the B2B procurement lifecycle, calculate B2B-KD difficulty scores, compute KGR ratios, cluster keywords into topic clusters, and automatically generate Pillar-Cluster content architecture and buyer's guide outlines.
 
 ## Core Capabilities
 
-1. **Zero-Setup Keyword Expansion (`scraper.py`)**:
+1. **B2B Keyword Sourcing Expansion (`scraper.py` + `b2b_config.py`)**:
    - Zero token / zero API keys required.
    - Harvests hundreds of long-tail search terms directly from Google Suggest.
-   - Strict word-boundary matching (`\b{keyword}\b`) prevents topic drift (e.g., `seo` never matches `seoul`).
-   - Professional SEO Alphabet Soup (A-Z suffixes/prefixes), question prefixes (how to, what is, why), and commercial modifiers (best, vs, checklist).
+   - Strict word-boundary matching (`\b{keyword}\b`) prevents topic drift.
+   - Features B2B supply chain, manufacturing, OEM/ODM, MOQ, RFQ, and engineering specification modifiers.
 
-2. **Gefei SEO Decision Engine (`evaluator.py`)**:
-   - **Search Intent**: Categorizes terms into Informational, Commercial, Tool/Utility, or Transactional.
-   - **Heuristic KD (0-100)**: Evaluates term length, intent specificity, competition density, and SERP title resistance.
+2. **B2B Intent & Opportunity Engine (`evaluator.py`)**:
+   - **Search Intent**: Categorizes terms into B2B Sourcing / RFQ, Technical Specs, Product Comparison, Tool/Utility, or Informational.
+   - **B2B-KD Difficulty (0-100)**: Evaluates term length, intent specificity, competition density, and SERP title resistance.
      - `0-20`: 🟢 Very Easy (ideal for new sites / immediate quick wins)
      - `21-40`: 🟡 Easy (topical authority single posts rank easily)
      - `41-60`: 🟠 Moderate (requires backlinks & topical cluster)
      - `61-100`: 🔴 Hard (dominated by mega sites)
-   - **Opportunity Score (0-100)**: Actionable verdict on whether the keyword is worth targeting (`【🔥 强烈推荐·核心文章】`, `【⚡ 优质长尾·易拿下流量】`, `【🛠️ 工具落地页】`, `【🛑 暂缓】`).
 
-3. **KGR (Keyword Golden Ratio) Calculator (`kgr.py`)**:
+3. **Keyword Clustering & Pillar-Cluster Architecture (`clustering.py`)**:
+   - Groups terms into 5 strategic procurement clusters: Sourcing/RFQ, Specs/Engineering, Comparisons, How-to/Process, and Maintenance.
+   - Automatically generates ASCII topology diagrams, Core Pillar Page blueprint, Cluster Sub-pages mapping, and bidirectional internal linking rules.
+
+4. **KGR (Keyword Golden Ratio) Calculator (`kgr.py`)**:
    - $\text{KGR} = \frac{\text{Allintitle Count}}{\text{Monthly Volume}}$
-   - Highlights terms with $\text{KGR} < 0.25$ that can hit page 1 immediately upon indexation.
+   - Highlights low-competition terms with $\text{KGR} < 0.25$ that can achieve early page 1 rankings.
 
-4. **Instant Article Topic & Outline Generator (`content_generator.py`)**:
-   - Solves creator writer's block.
-   - Automatically clusters keywords into 3 complete article blueprints:
-     - Pillar Post (H1 title, H2/H3 section architecture, FAQ schema targets)
-     - Commercial Roundup / Comparison (feature matrices & buying advice)
-     - Quick-Win Q&A Posts (targeted at Google Featured Snippets)
+5. **B2B Buyer's Guide & Content Outline Generator (`content_generator.py`)**:
+   - Generates 3 complete article blueprints:
+     - B2B Buyer's Sourcing Guide (H1 title, factory audit, MOQ pricing, FAQ schema)
+     - Technical Specification Guide (dimensions, materials, engineering workflows)
+     - Quick-Win Procurement Posts
 
 ## Quick Start Commands
 
 ```bash
 # Basic run: 100% free, out of the box (zero configuration needed)
-python run.py "ai photo generator"
+python run.py "airless bottle"
 
 # Run with KGR calculation
-python run.py "crochet pattern" --kgr
+python run.py "rotary tablet press" --kgr
 
 # Target specific language and region
-python run.py "独立站" --hl zh-CN --gl cn
-
-# Configure official Google Ads API credentials (interactive wizard)
-python run.py --setup
-
-# Direct official Google Ads metrics
-python run.py "seo audit" --official
+python run.py "injection molding" --hl en --gl uk
 ```
 
 ## References
 
-- For Gefei's keyword selection methodology, read [references/gefei_seo_methodology.md](references/gefei_seo_methodology.md).
+- For B2B Intent Clustering and Pillar-Cluster architecture, read [references/b2b_pillar_cluster_architecture.md](references/b2b_pillar_cluster_architecture.md).
+- For Agency B2B SEO operational SOP, read [references/b2b_agency_seo_playbook.md](references/b2b_agency_seo_playbook.md).
 - For free Google Cloud OAuth setup, read [references/google_cloud_setup_guide.md](references/google_cloud_setup_guide.md).
 - For API error troubleshooting, read [references/api_errors_and_limits.md](references/api_errors_and_limits.md).

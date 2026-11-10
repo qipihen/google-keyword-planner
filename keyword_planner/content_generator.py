@@ -74,7 +74,7 @@ def generate_content_plan(
 
     # ---------------- 方案三：低竞争开荒长尾词与询盘诱饵 (Quick-Win Long-Tail Posts) ----------------
     plan_md.append("## 📌 方案三：新站极速冲刺词单 (Quick-Win Long-Tail Articles)")
-    plan_md.append("> 专挑哥飞 KD 最低 (0-20分) 或 KGR < 0.25 的精准采购长尾词，没有头部大站专门做针对性优化，新站发布后能极快获得排名与精准询盘。")
+    plan_md.append("> 专挑 B2B-KD 最低 (0-20分) 或 KGR < 0.25 的精准采购长尾词，没有头部大站专门做针对性优化，新站发布后能极快获得排名与精准询盘。")
     easy_kws = [k for k in sorted_kws if k.get("kd", 50) <= 25][:6]
     if not easy_kws:
         easy_kws = sorted_kws[:6]
