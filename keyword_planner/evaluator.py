@@ -1,46 +1,42 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
-哥飞 SEO 选词决策与机会评估引擎 (Gefei SEO Decision Engine)
-
-核心方法论：
-1. 【搜索意图分类 (Search Intent)】：
-   - Informational (信息型/教程): 适合写自然引流文章、FAQ、教程。
-   - Commercial (商业调查/评测): 适合做产品横评、Best 榜单、对比页，转化率极高。
-   - Transactional (交易/服务): 转化意愿最强，适合直接落地页或销售转化。
-   - Tool/Utility (工具/落地页): 搜索量大、粘性高，适合做免费轻量小工具或程序化页面。
-
-2. 【哥飞版启发式 KD 难度评估 (0-100)】：
-   - 考虑词长与长尾结构、意图特异性、修饰词阻力与官方竞价指数。
-   - 0-20分：极低难度（新站闭眼写，几乎无专门针对该词优化的竞品）
-   - 21-40分：低难度（写一篇结构完整、解答深刻的单篇内容极易冲上前排）
-   - 41-60分：中等难度（需要一定网站权重与外链积累）
-   - 61-100分：高难度（行业大站/维基百科/聚合页盘踞，新手避坑）
-
-3. 【“值不值得做”综合机会评分 (Opportunity Score 0-100)】：
-   - 权衡“流量规模 × 商业变现价值 ÷ 竞争阻力”，给出明确的行动建议。
+哥飞 SEO 选词决策引擎 (结合 B2B 工业采购与高客单转化加权)
 """
 
 import re
 from typing import Dict, Any, List, Optional, Tuple
 
 INTENT_PATTERNS = {
-    "Transactional": [
-        r"\bbuy\b", r"\bpurchase\b", r"\bcheap\b", r"\bdiscount\b", r"\bcoupon\b",
-        r"\bpricing\b", r"\bprice\b", r"\bcost\b", r"\border\b", r"\bhire\b",
-        r"\bquote\b", r"\bdeal\b", r"\bsale\b", r"\bwholesale\b", r"\bagency\b",
-        r"\bservice\b", r"\bfor sale\b"
+    # B2B 供应链寻源与大宗采购意图 (极高商业转化价值)
+    "B2B Sourcing / RFQ": [
+        r"\bmanufacturer\b", r"\bmanufacturers\b", r"\bsupplier\b", r"\bsuppliers\b",
+        r"\bfactory\b", r"\bfactories\b", r"\bvendor\b", r"\bvendors\b",
+        r"\bwholesale\b", r"\bwholesaler\b", r"\bdistributor\b", r"\bdistributors\b",
+        r"\bcustom\b", r"\bcustomized\b", r"\boem\b", r"\bodm\b", r"\bprivate label\b",
+        r"\bbulk\b", r"\bmoq\b", r"\brfq\b", r"\bquote\b", r"\bquotation\b",
+        r"\blead time\b", r"\bcontract manufacturing\b"
     ],
+    # 技术标准与规格选型意图
+    "Technical Specs": [
+        r"\bspecs\b", r"\bspecification\b", r"\bdatasheet\b", r"\bstandards\b",
+        r"\bmaterials\b", r"\bprocess\b", r"\bmanufacturing process\b",
+        r"\bhow it works\b", r"\bdiagram\b", r"\bdimensions\b", r"\bcapacity\b",
+        r"\biso\b", r"\bce certified\b", r"\bfda\b", r"\bgmp\b"
+    ],
+    # 商业调查与横评
     "Commercial": [
         r"\bbest\b", r"\btop\b", r"\breview\b", r"\breviews\b", r"\bvs\b",
         r"\bversus\b", r"\bcomparison\b", r"\balternative\b", r"\balternatives\b",
         r"\bworth it\b", r"\branked\b", r"\branking\b", r"\brated\b"
     ],
+    # 工具与在线查询
     "Tool": [
         r"\bgenerator\b", r"\bcalculator\b", r"\bmaker\b", r"\bconverter\b",
         r"\bchecker\b", r"\banalyzer\b", r"\btemplate\b", r"\bsoftware\b",
         r"\btool\b", r"\btools\b", r"\bapp\b", r"\bonline free\b", r"\bextension\b"
     ],
+    # 信息与基础教程
     "Informational": [
         r"\bhow to\b", r"\bhow do\b", r"\bwhat is\b", r"\bwhat are\b", r"\bwhy\b",
         r"\bcan you\b", r"\bguide\b", r"\btutorial\b", r"\btips\b", r"\bexamples\b",
@@ -50,13 +46,12 @@ INTENT_PATTERNS = {
 
 
 def detect_intent(keyword: str) -> str:
-    """判定关键词的主要搜索意图"""
     kw_lower = keyword.lower()
     for intent, patterns in INTENT_PATTERNS.items():
         for pat in patterns:
             if re.search(pat, kw_lower):
                 return intent
-    return "Informational"  # 默认倾向于信息型搜索
+    return "Informational"
 
 
 def calculate_gefei_kd(
@@ -65,14 +60,10 @@ def calculate_gefei_kd(
     google_ads_comp_index: Optional[int] = None,
     allintitle_count: Optional[int] = None
 ) -> int:
-    """
-    计算哥飞版启发式 KD (0-100)
-    结合词长效应、意图特异性、竞价竞争指数与 Allintitle 密度
-    """
     words = keyword.strip().split()
     word_count = len(words)
 
-    # 1. 基础词长分：词越长，长尾程度越高，全网针对性优化越少
+    # 1. 基础词长分
     if word_count == 1:
         base_kd = 88
     elif word_count == 2:
@@ -80,26 +71,27 @@ def calculate_gefei_kd(
     elif word_count == 3:
         base_kd = 46
     elif word_count == 4:
-        base_kd = 28
+        base_kd = 26
     elif word_count == 5:
-        base_kd = 18
+        base_kd = 16
     else:
-        base_kd = 12
+        base_kd = 10
 
-    # 2. 意图修正：特异性强的疑问词、对比词容易突破
+    # 2. 意图修正 (B2B 采购词多属于极具针对性的长尾，优化阻力极易穿透)
     intent_modifier = 0
-    if intent == "Informational" and re.search(r"^(how to|what is|why|can)", keyword.lower()):
+    if intent == "B2B Sourcing / RFQ":
+        intent_modifier -= 6
+    elif intent == "Technical Specs":
+        intent_modifier -= 4
+    elif intent == "Informational" and re.search(r"^(how to|what is|why|can)", keyword.lower()):
         intent_modifier -= 8
     elif intent == "Commercial" and "vs" in keyword.lower():
         intent_modifier -= 6
-    elif intent == "Transactional":
-        intent_modifier += 5  # 商业交易词做竞价与SEO的对手相对更多
 
-    # 3. Google Ads 官方竞争指数融合 (0-100)
+    # 3. Google Ads 竞价指数修正
     ads_modifier = 0
     if google_ads_comp_index is not None and google_ads_comp_index > 0:
-        # 竞价竞争指数往往与 SEO 竞争正相关，但长尾词中竞价与自然排名有差
-        ads_modifier = int((google_ads_comp_index - 50) * 0.25)
+        ads_modifier = int((google_ads_comp_index - 50) * 0.20)
 
     # 4. Allintitle 修正
     title_modifier = 0
@@ -122,52 +114,51 @@ def calculate_opportunity_score(
     cpc: float = 0.0,
     kgr: Optional[float] = None
 ) -> Tuple[int, str]:
-    """
-    计算“值不值得做”综合机会评分 (Opportunity Score 0-100) 与决策判定
-    """
-    # 难度阻力分 (100 - KD)
     ease_score = max(0, 100 - kd)
 
-    # 商业价值权重
+    # B2B 行业搜索量虽小，单次转化价值数万美金，意图权重极大
     intent_weight = {
-        "Transactional": 1.25,
+        "B2B Sourcing / RFQ": 1.40,
+        "Technical Specs": 1.25,
         "Commercial": 1.20,
         "Tool": 1.15,
         "Informational": 1.00
     }.get(intent, 1.0)
 
-    # CPC 加权 (高出价意味着高收益潜力)
-    cpc_bonus = min(20.0, cpc * 2.5) if cpc > 0 else 5.0
+    cpc_bonus = min(25.0, cpc * 3.0) if cpc > 0 else 5.0
 
-    # 搜索量适中加分 (50~2000 的词新站性价比最高)
+    # 搜索量平滑曲线 (B2B 黄金月搜区间为 20 ~ 1,500)
     vol_bonus = 10.0
     if search_volume > 0:
-        if 50 <= search_volume <= 1500:
-            vol_bonus = 20.0
-        elif 1500 < search_volume <= 8000:
-            vol_bonus = 15.0
-        elif search_volume > 8000:
-            vol_bonus = 8.0  # 大词难啃，加分反而克制
+        if 20 <= search_volume <= 800:
+            vol_bonus = 25.0
+        elif 800 < search_volume <= 4000:
+            vol_bonus = 18.0
+        elif search_volume > 4000:
+            vol_bonus = 10.0
 
-    # KGR 奖励
     kgr_bonus = 0
     if kgr is not None:
         if kgr < 0.25:
-            kgr_bonus = 15
+            kgr_bonus = 20
         elif kgr <= 1.0:
-            kgr_bonus = 5
+            kgr_bonus = 8
 
-    raw_score = (ease_score * 0.55) + (cpc_bonus) + (vol_bonus) + (kgr_bonus)
-    final_score = int(min(99, max(10, raw_score * intent_weight * 0.75)))
+    raw_score = (ease_score * 0.50) + (cpc_bonus) + (vol_bonus) + (kgr_bonus)
+    final_score = int(min(99, max(10, raw_score * intent_weight * 0.72)))
 
-    # 行动建议与判定
-    if intent == "Tool" and kd <= 45:
-        verdict = "【🛠️ 工具落地页·程序化】"
+    # 行动决策与判定
+    if intent == "B2B Sourcing / RFQ":
+        verdict = "【💼 采购寻源·询盘转化必写】"
+    elif intent == "Technical Specs":
+        verdict = "【📐 选型参数·技术背书长文】"
+    elif intent == "Tool" and kd <= 45:
+        verdict = "【🛠️ 选型工具·计算器落地页】"
     elif kgr is not None and kgr < 0.25:
         verdict = "【⚡ 黄金KGR·极速排名前排】"
-    elif final_score >= 80:
-        verdict = "【🔥 强烈推荐·核心文章必写】"
-    elif final_score >= 65:
+    elif final_score >= 78:
+        verdict = "【🔥 强烈推荐·核心支柱文章】"
+    elif final_score >= 60:
         verdict = "【⚡ 优质长尾·易拿下流量】"
     elif final_score >= 45:
         verdict = "【⚖️ 评测对比·可规划排期】"
@@ -185,7 +176,6 @@ def evaluate_keyword_item(
     allintitle_count: Optional[int] = None,
     kgr: Optional[float] = None
 ) -> Dict[str, Any]:
-    """对单条关键词执行全面哥飞指标评估"""
     intent = detect_intent(keyword)
     kd = calculate_gefei_kd(
         keyword=keyword,
@@ -201,7 +191,6 @@ def evaluate_keyword_item(
         kgr=kgr
     )
 
-    # KD 视觉分级
     if kd <= 20:
         kd_badge = f"🟢 {kd} (极低)"
     elif kd <= 40:

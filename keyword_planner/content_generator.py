@@ -1,13 +1,8 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
-文章选题与 SEO 内容大纲智能生成器 (Content Strategy & Outline Generator)
-
-解决创作者核心痛点：
-“想写文章却不知道写什么词？”
-“挖出一堆长尾词后，不知道该怎么组合成一篇文章的标题与大纲？”
-
-本模块自动聚类高价值长尾词，生成可直接落地的 H1 文章标题、H2 章节目录架构和 LSI 词布局方案。
+B2B 采购与出海文章大纲智能生成器 (B2B Content Strategy & Outline Generator)
+解决乙方 SEO 操盘 B 端行业客户时“Semrush 挖不出词、内容团队不知道写什么话题”的痛点。
 """
 
 import re
@@ -19,74 +14,72 @@ def generate_content_plan(
     evaluated_keywords: List[Dict[str, Any]],
     top_n: int = 15
 ) -> str:
-    """基于评估结果，自动提炼出 3 套不同类型的深度文章选题与大纲"""
     if not evaluated_keywords:
         return "⚠️ 无可用关键词数据，无法生成内容方案。"
 
-    # 按机会评分降序
     sorted_kws = sorted(evaluated_keywords, key=lambda x: x.get("opportunity_score", 0), reverse=True)
 
-    info_kws = [k for k in sorted_kws if k.get("intent") == "Informational"]
+    b2b_kws = [k for k in sorted_kws if k.get("intent") == "B2B Sourcing / RFQ"]
+    specs_kws = [k for k in sorted_kws if k.get("intent") == "Technical Specs"]
     comm_kws = [k for k in sorted_kws if k.get("intent") == "Commercial"]
-    tool_kws = [k for k in sorted_kws if k.get("intent") == "Tool"]
     high_score_kws = sorted_kws[:top_n]
 
-    # 提取问答词
-    question_kws = [k["keyword"] for k in sorted_kws if re.search(r"^(how|what|why|can|where|is)", k["keyword"].lower())]
+    question_kws = [
+        k["keyword"] for k in sorted_kws
+        if re.search(r"^(how|what|why|can|where|is|which)", k["keyword"].lower())
+    ]
 
     plan_md = []
-    plan_md.append(f"# ✍️ 基于「{seed_keyword}」的 SEO 文章选题与大纲规划方案\n")
-    plan_md.append("> 本方案基于 Google 真实长尾搜索词与哥飞机会评分自动聚类，专为新站突围与高排名前排设计。\n")
+    plan_md.append(f"# 🏭 基于「{seed_keyword}」的 B2B 行业 SEO 采购指南与文章大纲方案\n")
+    plan_md.append("> 专为 B 端制造外贸、OEM/ODM、工业设备及供应链出海企业量身打造。\n")
 
-    # ---------------- 方案 A：权威支柱长文 (Pillar Post) ----------------
-    pillar_kw = high_score_kws[0]["keyword"] if high_score_kws else seed_keyword
-    plan_md.append("## 📌 方案一：核心支柱长文 (Pillar Guide)")
-    plan_md.append(f"- **目标主词**：`{pillar_kw}` (哥飞KD: {high_score_kws[0].get('kd_badge', 'N/A')})")
-    plan_md.append(f"- **建议文章 H1 标题**：`The Ultimate Guide to {seed_keyword.title()}: Strategies, Best Practices, and Tools for Beginners`")
-    plan_md.append("- **建议字数**：2,000 ~ 3,500 词")
+    # ---------------- 方案一：B2B 采购寻源指南 (B2B Sourcing & Buyer's Guide) ----------------
+    sourcing_kw = b2b_kws[0]["keyword"] if b2b_kws else high_score_kws[0]["keyword"]
+    plan_md.append("## 📌 方案一：B2B 核心采购寻源指南 (Buyer's Sourcing Guide)")
+    plan_md.append(f"- **目标主词**：`{sourcing_kw}` (意图: B2B Sourcing)")
+    plan_md.append(f"- **建议文章 H1 标题**：`How to Source & Buy {seed_keyword.title()}: The Complete B2B Buyer's Guide for Manufacturers & Distributors`")
+    plan_md.append("- **商业变现定位**：直接承接海外采购经理、外贸采购总监的询盘 (Inquiry / RFQ)，沉淀高客单转化")
+    plan_md.append("- **建议字数**：2,200 ~ 3,500 词")
     plan_md.append("- **章节骨架 (建议 H2 / H3 目录)**：")
-    plan_md.append(f"  - **H2: What is {seed_keyword.title()} and Why Does It Matter?** (基础概念铺垫)")
-    if question_kws:
-        for q in question_kws[:3]:
-            plan_md.append(f"    - **H3: {q.capitalize()}?**")
-    plan_md.append(f"  - **H2: Step-by-Step Implementation Guide** (核心实操步骤)")
-    if len(high_score_kws) > 3:
-        for item in high_score_kws[1:4]:
-            plan_md.append(f"    - **H3: How to Leverage {item['keyword'].title()}**")
-    plan_md.append(f"  - **H2: Essential Tools & Checklists** (工具推荐与排坑)")
-    if tool_kws:
-        plan_md.append(f"    - **H3: Recommended {tool_kws[0]['keyword'].title()}**")
-    plan_md.append(f"  - **H2: Common Mistakes to Avoid** (新手避坑指南)")
-    plan_md.append(f"  - **H2: Frequently Asked Questions (FAQ)** (布局精选长尾词获取快速卡片排名)")
-    for q in question_kws[3:6]:
-        plan_md.append(f"    - **H3: {q.capitalize()}?**")
-    plan_md.append("\n" + "-" * 60 + "\n")
+    plan_md.append(f"  - **H2: Understanding {seed_keyword.title()}: Types, Applications & Industry Standards**")
+    if specs_kws:
+        for sk in specs_kws[:3]:
+            plan_md.append(f"    - **H3: Key Considerations for {sk['keyword'].title()}**")
+    plan_md.append(f"  - **H2: How to Evaluate Reliable {seed_keyword.title()} Manufacturers & Suppliers**")
+    plan_md.append("    - H3: Factory Audit & Quality Control (ISO, FDA, CE Standards)")
+    plan_md.append("    - H3: MOQ, Pricing Structures & Lead Time Breakdown")
+    plan_md.append(f"  - **H2: Custom OEM/ODM Capabilities: Materials, Tooling & Design**")
+    if b2b_kws:
+        for bk in b2b_kws[1:4]:
+            plan_md.append(f"    - **H3: Best Practices for {bk['keyword'].title()}**")
+    plan_md.append("  - **H2: Common Pitfalls to Avoid in Overseas Sourcing** (避坑指南与质检要点)")
+    plan_md.append("  - **H2: Frequently Asked Procurement Questions (FAQ)** (布局长尾疑问词，获取 Google 首页精选摘要)")
+    for qk in question_kws[:4]:
+        plan_md.append(f"    - **H3: {qk.capitalize()}?**")
+    plan_md.append("\n" + "-" * 70 + "\n")
 
-    # ---------------- 方案 B：高转化评测与选购对比 (Commercial / VS Post) ----------------
-    if comm_kws or len(sorted_kws) > 5:
-        target_comm = comm_kws[0]["keyword"] if comm_kws else sorted_kws[1]["keyword"]
-        plan_md.append("## 📌 方案二：高转化评测对比文章 (Commercial Roundup)")
-        plan_md.append(f"- **目标主词**：`{target_comm}`")
-        plan_md.append(f"- **建议文章 H1 标题**：`Best {seed_keyword.title()} in 2026: In-Depth Review, Comparison & Buying Guide`")
-        plan_md.append("- **建议字数**：1,500 ~ 2,200 词")
-        plan_md.append("- **变现定位**：适合插入联盟营销链接、SaaS 分销推广或自营服务转化")
-        plan_md.append("- **章节骨架**：")
-        plan_md.append("  - **H2: Quick Verdict: Top Picks at a Glance** (置顶核心推荐对比表)")
-        plan_md.append(f"  - **H2: How We Tested and Evaluated {seed_keyword.title()}** (建立可信度与专业度)")
-        plan_md.append("  - **H2: Detailed Breakdown of Top Contenders** (每个竞品优缺点深评)")
-        plan_md.append("  - **H2: Feature & Pricing Comparison Table** (参数横评矩阵)")
-        plan_md.append("  - **H2: Which One Should You Choose?** (按不同人群给出选择建议)")
-        plan_md.append("\n" + "-" * 60 + "\n")
+    # ---------------- 方案二：工程选型与工艺参数对比 (Technical Specs & Material Guide) ----------------
+    tech_kw = specs_kws[0]["keyword"] if specs_kws else (comm_kws[0]["keyword"] if comm_kws else high_score_kws[1]["keyword"])
+    plan_md.append("## 📌 方案二：工程选型与材质工艺技术长文 (Technical Specification Guide)")
+    plan_md.append(f"- **目标主词**：`{tech_kw}`")
+    plan_md.append(f"- **建议文章 H1 标题**：`{seed_keyword.title()} Specifications & Selection Guide: Materials, Engineering Process & Comparison`")
+    plan_md.append("- **受众定位**：海外产品研发工程师、工艺师、采购技术决策人")
+    plan_md.append("- **建议字数**：1,800 ~ 2,600 词")
+    plan_md.append("- **章节骨架**：")
+    plan_md.append(f"  - **H2: Comprehensive Technical Specifications & Dimensions Table** (置顶核心参数表)")
+    plan_md.append(f"  - **H2: Material Selection: Pros and Cons of Different Compounds/Alloys** (材质优劣势横评)")
+    plan_md.append(f"  - **H2: Manufacturing Process: From Raw Material to Precision Finished Product** (生产工艺拆解)")
+    plan_md.append(f"  - **H2: Testing & Compliance (Stress, Durability & Environmental Standards)** (检测标准与认证)")
+    plan_md.append("\n" + "-" * 70 + "\n")
 
-    # ---------------- 方案 C：快速见效长尾问答文章 (Quick-Win Q&A) ----------------
-    plan_md.append("## 📌 方案三：极速见效长尾文章 (Quick-Win Post)")
-    plan_md.append("> 专挑哥飞 KD 最低 (0-20分) 或 KGR < 0.25 的长尾词，极低竞争，发布后极快获得自然排名。")
-    easy_kws = [k for k in sorted_kws if k.get("kd", 50) <= 30][:6]
+    # ---------------- 方案三：低竞争开荒长尾词与询盘诱饵 (Quick-Win Long-Tail Posts) ----------------
+    plan_md.append("## 📌 方案三：新站极速冲刺词单 (Quick-Win Long-Tail Articles)")
+    plan_md.append("> 专挑哥飞 KD 最低 (0-20分) 或 KGR < 0.25 的精准采购长尾词，没有头部大站专门做针对性优化，新站发布后能极快获得排名与精准询盘。")
+    easy_kws = [k for k in sorted_kws if k.get("kd", 50) <= 25][:6]
     if not easy_kws:
-        easy_kws = sorted_kws[:5]
-    plan_md.append("- **精选开荒低竞争长尾词列表**：")
+        easy_kws = sorted_kws[:6]
+    plan_md.append("- **建议重点开荒的长尾采购词**：")
     for ek in easy_kws:
-        plan_md.append(f"  - `{ek['keyword']}` (KD: {ek.get('kd_badge', 'N/A')}, 判定: {ek.get('verdict', 'N/A')})")
-    plan_md.append("- **写作建议**：针对这些问题直接给出 50~80 词精炼回答，极易触发 Google 首页精选摘要 (Featured Snippets)！")
+        plan_md.append(f"  - `{ek['keyword']}` (KD: {ek.get('kd_badge', 'N/A')}, 意图: {ek.get('intent', 'N/A')}, 评分: {ek.get('opportunity_score')})")
 
     return "\n".join(plan_md)

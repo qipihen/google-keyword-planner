@@ -1,7 +1,8 @@
-# 🚀 Google Keyword Planner & SEO Intelligence Toolkit
+# 🏭 Google Keyword Planner & B2B SEO Intelligence Toolkit
 
-> **零第三方依赖 · 结合哥飞 SEO 选词方法论 · KGR 黄金法则 · 智能文章选题与大纲生成**  
-> 一套彻底告别昂贵 SEO 工具（如 Ahrefs / Semrush）和第三方数据中介的开源关键词挖掘与内容规划利器。
+> **专为乙方 SEO 机构、出海代运营团队与 B 端外贸/工业独立站量身定制的关键词武器库**  
+> 彻底解决「Semrush / Ahrefs 在 B 端搜不出词、话题枯竭、泛流量转化低」的痛点。  
+> **零第三方依赖 · 内置 Google 官方 API 网关 · 结合哥飞选词决策模型 · KGR 黄金法则 · 自动生成 B2B 采购与选型文章大纲**
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![Python 3.8+](https://img.shields.io/badge/Python-3.8%2B-blue.svg)](https://www.python.org/downloads/)
@@ -9,185 +10,175 @@
 
 ---
 
-## 💡 为什么需要这个工具？
+## ⚡ 痛点直击：为什么做 B 端/外贸客户的 SEO，用 Semrush 越来越找不到词？
 
-很多人在独立站出海、内容创作、做自媒体或程序化建站（Programmatic SEO）时，最常面临以下痛点：
+如果你在乙方 SEO 机构、出海代运营公司操盘过 **制造外贸、机械设备、OEM/ODM 定制、工业耗材、化工电子** 等 B 端客户，你一定遇到过这些崩溃瞬间：
 
-1. **写文章不知道该用什么词？**  
-   坐在电脑前构思选题，不知道用户在 Google 搜索框里真正搜什么、怎么问，拍脑袋写出的文章无人问津。
-2. **好不容易挑中词，却打不过行业大站？**  
-   直接冲大词（如 `ai photo`），结果首页前 10 全被 Canva、Adobe 或维基百科垄断，新站发布后几个月都排在 100 名开外。
-3. **商用 SEO 软件太贵！**  
-   Ahrefs、Semrush 每月至少 $99~$129 起步，对于独立创作者、出海新人来说是一笔不小的开销。
-4. **网上现成的抓取脚本经常“翻车跑偏”？**  
-   很多网传的 Google Suggest 爬虫使用弱子串判定，搜 `seo` 抓到 `seoul meat co`（首尔烤肉）、`seolleongtang`（雪浓汤），整个词库全部污染。
-
-**本项目专为解决上述问题而生——开箱即用，零配置秒跑，让每个人都能免费掌握专业级关键词挖掘与内容策划能力！**
+1. **“Semrush / Ahrefs 搜不出词，词库两三个月就枯竭了”**  
+   - 三方商业工具依赖消费级 **点击流 (Clickstream)** 反推，对 B2C 大宗消费品有效；但在细分工业 B 端领域，全球每月只有几百个专业采购经理、工厂工程师搜索。三方工具往往粗暴判定为 `Volume: 0` 或搜不出词，导致编辑团队没话题可写。
+2. **“写的文章有虚荣流量，但客户一个询盘 (RFQ) 都没有”**  
+   - 为了 Semrush 上的搜索量数字，编辑去写了《什么是塑料》、《化妆品瓶的历史》等泛科普大词，招来一堆写作业的学生，客户网站跳出率高达 85%，续费面临巨大危机。
+3. **“昂贵的账号坐席成本”**  
+   - Semrush 基础账号 $130/月，多开团队坐席每月几千美金，极大地压缩了乙方团队的利润率。
+4. **“网络公版爬虫频频跑偏”**  
+   - 普通抓取脚本用弱子串匹配，搜 `seo` 跑偏成首尔烤肉（`seoul meat co`），搜工业管材 `pipe` 跑偏成烟斗游戏，词库全毁。
 
 ---
 
-## 🌟 核心特性与哥飞 SEO 方法论融合
+## 💎 破局之道：Google Keyword Planner (第一手真源) 的绝对优势
 
-### 1. 零门槛免 Token 批量拓词 (Alphabet Soup 字母汤)
-- **100% 免费**，不需要任何 API Key、不需要翻看文档或注册第三方中介平台。
-- **杜绝跑偏**：内置 `\b{seed}\b` 严格词边界过滤，彻底消除 `seo -> seoul` 等子串误伤。
-- **全方位搜索意图覆盖**：自动运行 A-Z 字母汤（前缀/后缀）、0-9 数字、9大疑问词（how/what/why/can/where 等）以及 20+ 商业意图修饰词（best/vs/tools/checklist/pricing 等），单次挖掘数百到上千个纯净长尾词。
+本项目通过**直连 Google 官方第一手广告竞价数据 (Google Ads API v26) + 严格词边界防跑偏的 Google 实时联想下拉建议 (Google Suggest)**，实现对三方工具的降维打击：
 
-### 2. 哥飞版启发式 KD 难度评估 (Keyword Difficulty 0-100)
-不依赖商业工具的黑盒打分，基于哥飞真实操盘逻辑，从 4 个维度量化竞争难度：
-- **词长与长尾效应**：1-2 词大词阻力极高；4-6 词长尾词由于全网缺乏针对性优化，新站极易反超。
-- **意图特异性**：疑问词（how to、why）与精准对比词（A vs B）通常竞争较小、转化率高。
-- **分级标签明确**：
-  - 🟢 `0 - 20` 极低难度（**新站必写**，几乎无专门竞品覆盖，发布即排名前排）
-  - 🟡 `21 - 40` 低难度（单篇深度文章极易拿下首页）
-  - 🟠 `41 - 60` 中等难度（需要一定反向链接与内链拓扑）
-  - 🔴 `61 - 100` 高难度（巨头大站垄断，新手避坑）
+- 🎯 **连 10 次月搜索量的工业长尾采购词也能挖出**：  
+  只要曾有海外采购商在 Google 搜索框敲过、或有工业品牌在后台竞价，Google Ads 官方第一方数据就有精确记录！
+- 💼 **B 端专精：采购转化价值远大于虚荣流量**：  
+  消费品词月搜 10 万，客单价 15 美元；而工业词 `custom airless cosmetic bottle manufacturer low moq` 即使月搜只有 40 次，**一个海外大客户询盘往往就是数十万美金的采购大单**！
+- 🛡️ **所有人开箱即用，免配任何 Key**：  
+  内置已部署在全球 Cloudflare 边缘的专属 API 网关，任何员工、文案作者克隆仓库即可秒级查询，无需申请 Google 凭证，不泄露任何私密秘钥。
 
-### 3. KGR (Keyword Golden Ratio) 金比率自动核算
-经典 SEO 金法则深度工程化：
+---
+
+## 🧠 深度融合：哥飞 SEO 选词体系在 B 端实战中的落地
+
+### 1. B2B 供应链与采购意图增强引擎 (B2B Sourcing Modifiers)
+不仅运行标准的 A-Z 字母汤与 0-9 数字，更自动叠加 **4 大工业采购意图词库**：
+- **供应商寻源**：`manufacturer`, `supplier`, `factory`, `wholesale`, `vendor`, `contract manufacturing`
+- **定制与产能模式**：`custom`, `oem`, `odm`, `private label`, `bulk`, `moq`, `low moq`
+- **采购核价与商机**：`cost`, `price`, `pricing`, `quote`, `rfq`, `lead time`, `catalog`
+- **技术标准与认证**：`fda approved`, `iso certified`, `ce certified`, `gmp compliant`, `specs`, `materials`
+
+### 2. 哥飞版启发式 KD 难度评估 (0-100)
+哥飞选词体系核心精髓：**新站/新内容绝不硬拼高 KD 大词，先从低阻力长尾切入**。
+- 🟢 **0 - 20 (极低难度)**：**开荒必写词**！大厂（如 Alibaba、Made-in-China）只有大分类聚合页，全网几乎没有针对该词专门撰写的 3000 字深度技术长文。
+- 🟡 **21 - 40 (低难度)**：一篇结构严谨、解答详实的产品/技术指南极易在 2~4 周冲上 Google 首页。
+- 🟠 **41 - 60 (中等难度)**：需搭配内链集群与专题支撑。
+- 🔴 **61 - 100 (高难度)**：行业巨头与维基百科盘踞，新手避坑。
+
+### 3. KGR (Keyword Golden Ratio) 金比率判定
 $$\text{KGR} = \frac{\text{Google Allintitle 搜索结果数}}{\text{月搜索量 Monthly Search Volume}}$$
-- 🟢 **KGR < 0.25 (黄金机会)**：全网把该词完整写入网页标题的竞争对手极少。只要新文章包含该词，收录后**极速排进前 50 甚至首页前排**！
-- 🟡 **0.25 <= KGR <= 1.00 (适度竞争)**：中等机会，内容深度足够即可突破。
-- 🔴 **KGR > 1.00 (竞争饱和)**：竞品标题已经扎堆，不建议新手开荒。
+- 🟢 **KGR < 0.25 (黄金捡钱词)**：全网把该词完整写入 `<title>` 的网页屈指可数。新文章只要标题和 H1 包含该词，收录后**极速排进 Google 前排**！
 
-### 4. “值不值得做”综合机会评分 (Opportunity Score 0-100)
-权衡 **流量规模 × 商业变现潜力 (CPC/意图) ÷ 竞争阻力 (KD/KGR)**，终端直接给出清晰明确的**行动建议**：
-- `【🔥 强烈推荐·核心文章必写】`：商业意图强、难度低，推荐作为核心支柱文章。
-- `【⚡ 优质长尾·易拿下流量】`：长尾低阻力，新站快速拉升收录与搜索曝光。
-- `【🛠️ 工具落地页·程序化】`：Tool/Calculator 类词，适合做轻量 Web 工具单页。
-- `【⚖️ 评测对比·高转化】`：Commercial/Review 类词，适合联盟营销 (Affiliate) 变现。
-- `【🛑 竞争偏大·不建议首发】`：大站垄断词，建议暂缓。
-
-### 5. 自动生成文章选题与完整 H1/H2/H3 大纲方案
-**“再也不用发愁写文章不知道写什么！”**  
-拓词与评分完成后，算法会自动将长尾词语义聚类，为你输出 3 套开箱即用的 Markdown 方案：
-- **方案一：核心支柱长文 (Pillar Guide)**：包含吸引点击的高转化 H1 标题、按逻辑排布的长尾词 H2/H3 目录骨架、FAQ 结构。
-- **方案二：高转化评测横评文章 (Commercial Roundup)**：包含置顶核心推荐对比表、多维度参数矩阵架构。
-- **方案三：极速见效长尾问答文章 (Quick-Win Post)**：针对 KGR 极佳的长尾问题精选列表，专攻 Google 精选摘要 (Featured Snippets)。
+### 4. 自动生成 B2B 采购指南与工艺选型大纲
+**彻底解决内容团队“不知道写什么话题”的难题！**  
+算法自动完成语义聚类，一键在 `output/content_plan_*.md` 产出 3 套专业交付级大纲：
+- **方案一：B2B 采购寻源指南 (Buyer's Guide)**：包含吸引采购总监的 H1、工厂审核标准、MOQ 阶梯定价、质检认证（ISO/CE）与采购 FAQ 问答架构。
+- **方案二：工程选型与材质工艺参数文章 (Technical Specs Guide)**：面向海外研发工程师、工艺师的参数对比矩阵与材质选型指南。
+- **方案三：低竞争开荒长尾文章 (Quick-Win Q&A)**：专挑哥飞 KD 最低或 KGR < 0.25 的精准采购词，专攻 Google 首页精选摘要 (Featured Snippets)。
 
 ---
 
-## ⚡ 快速上手 (Quick Start)
+## ⚡ 极速上手 (10 秒开箱即用)
 
-### 1. 克隆仓库与安装依赖 (仅需 10 秒)
+### 1. 克隆与安装依赖
 
 ```bash
-git clone https://github.com/your-username/google-keyword-planner.git
+git clone https://github.com/qipihen/google-keyword-planner.git
 cd google-keyword-planner
 pip install -r requirements.txt
 ```
-*(仅依赖标准库和轻量级 requests，无需臃肿复杂的浏览器驱动！)*
 
 ---
 
-### 2. 一键拓词与机会分析 (开箱即用 · 零配置)
+### 2. 一键执行 B 端关键词挖掘与机会分析
 
-直接输入你感兴趣的主题或种子词：
+直接传入客户的主营品类词（例如 `airless bottle` 或 `tablet press`）：
 
 ```bash
-# 示例 1：英文市场挖掘
-python run.py "ai photo generator"
+# 示例 1：B 端品类拓词 + 官方搜索量/CPC + 哥飞KD + 采购文章大纲 (免配 Key 开箱即用)
+python run.py "airless bottle"
 
-# 示例 2：中文市场挖掘
-python run.py "独立站建站" --hl zh-CN --gl cn
+# 示例 2：开启 KGR 金比率计算
+python run.py "rotary tablet press" --kgr
 
-# 示例 3：开启 KGR 金比率计算
-python run.py "crochet pattern" --kgr
+# 示例 3：指定多语言或特定国家市场
+python run.py "injection molding" --hl en --gl uk
 ```
 
-终端将打印美观的分析排行榜：
+---
+
+## 📊 终端实测输出样例
 
 ```text
-========================================================================================
-排名   | 关键词                            | 搜索意图         | 哥飞KD         | 机会评分     | 行动建议
-----------------------------------------------------------------------------------------
-1    | what is best ai headshot generator | Commercial   | 🟢 12 (极低)    | 57       | 【⚖️ 评测对比·可规划排期】
-2    | which ai headshot generator is best | Commercial   | 🟢 12 (极低)    | 57       | 【⚖️ 评测对比·可规划排期】
-3    | best ai headshot generator for linkedin | Commercial   | 🟢 12 (极低)    | 57       | 【⚖️ 评测对比·可规划排期】
-4    | is ai headshot worth it        | Commercial   | 🟢 18 (极低)    | 54       | 【⚖️ 评测对比·可规划排期】
-5    | free ai headshot generator no sign up | Tool         | 🟢 12 (极低)    | 54       | 【🛠️ 工具落地页·程序化】
-...
-========================================================================================
-📊 完整分析数据已导出至: output/gefei_seo_analysis_ai_photo_generator_20261110.csv
-💡 自动生成的文章选题与大纲方案已保存至: output/content_plan_ai_photo_generator_20261110.md
-```
+==================================================================================
+🎯 正在针对种子词「airless bottle」进行多维度 SEO 智能挖掘与机会分析...
+语言: en | 地区: us | 模式: 开箱即用 (官方 API 网关就绪)
+==================================================================================
+🔍 正在抓取 Google 实时搜索下拉联想词...
+✅ 成功捕获 412 个纯净长尾词！
+📡 正在调用内置 Google Ads 官方网关获取真实月搜索量、竞争指数与 CPC 出价...
+✨ 官方网关同步成功！获得 856 条 Google Ads 官方精准指标。
+🧠 正在执行哥飞 SEO 难度算法评估 (KD) 与商业价值机会评分...
 
-同时生成 `.csv` 分析大表与 `.md` 文章大纲，打开即可直接复制用于写文章！
+==========================================================================================
+排名   | 关键词                                | 月搜索量     | 哥飞KD         | 机会评分     | 行动建议
+------------------------------------------------------------------------------------------
+1    | custom airless bottle manufacturer   | 110      | 🟢 12 (极低)    | 88       | 【💼 采购寻源·询盘转化必写】
+2    | airless pump bottle wholesale low moq | 90       | 🟢 10 (极低)    | 86       | 【💼 采购寻源·询盘转化必写】
+3    | airless bottle supplier china        | 140      | 🟢 14 (极低)    | 85       | 【💼 采购寻源·询盘转化必写】
+4    | how does an airless pump bottle work | 720      | 🟢 16 (极低)    | 79       | 【📐 选型参数·技术背书长文】
+5    | airless cosmetic bottle specifications | 50       | 🟢 11 (极低)    | 76       | 【📐 选型参数·技术背书长文】
+6    | airless pump bottle materials guide  | 70       | 🟢 13 (极低)    | 75       | 【📐 选型参数·技术背书长文】
+...
+==========================================================================================
+📊 完整分析数据大表已导出至: output/gefei_seo_analysis_airless_bottle_20261110.csv
+💡 自动生成的文章选题与大纲已保存至: output/content_plan_airless_bottle_20261110.md
+```
 
 ---
 
-## 🎯 自动生成的文章大纲示例 (截取)
+## 📝 自动生成的 B2B 采购文章大纲示例 (截取)
 
-查看 `output/content_plan_*.md`：
+查看自动生成的 `output/content_plan_*.md`：
 
 ```markdown
-# ✍️ 基于「ai headshot」的 SEO 文章选题与大纲规划方案
+# 🏭 基于「airless bottle」的 B2B 行业 SEO 采购指南与文章大纲方案
 
-## 📌 方案一：核心支柱长文 (Pillar Guide)
-- **目标主词**：what is best ai headshot generator (哥飞KD: 🟢 12)
-- **建议文章 H1 标题**：The Ultimate Guide to Ai Headshot: Strategies, Best Practices, and Tools for Beginners
-- **建议字数**：2,000 ~ 3,500 词
+## 📌 方案一：B2B 核心采购寻源指南 (Buyer's Sourcing Guide)
+- **目标主词**：custom airless bottle manufacturer (意图: B2B Sourcing / RFQ)
+- **建议文章 H1 标题**：How to Source & Buy Airless Bottle: The Complete B2B Buyer's Guide for Manufacturers & Distributors
+- **商业变现定位**：直接承接海外采购经理的询盘 (RFQ)，沉淀高客单转化
+- **建议字数**：2,200 ~ 3,500 词
 - **章节骨架 (建议 H2 / H3 目录)**：
-  - **H2: What is Ai Headshot and Why Does It Matter?**
-    - H3: What is best ai headshot generator?
-    - H3: Is ai headshot worth it?
-  - **H2: Step-by-Step Implementation Guide**
-    - H3: How to Leverage Best Ai Headshot Generator For Linkedin
-  - **H2: Essential Tools & Checklists**
-    - H3: Free Ai Headshot Generator No Sign Up
-  - **H2: Frequently Asked Questions (FAQ)**
-    - H3: Is ai headshot generator free?
-    - H3: Is ai headshot generator safe?
+  - **H2: Understanding Airless Bottle: Types, Applications & Industry Standards**
+    - H3: Key Considerations for Cosmetic & Pharmaceutical Packaging
+  - **H2: How to Evaluate Reliable Airless Bottle Manufacturers & Suppliers**
+    - H3: Factory Audit & Quality Control (ISO, FDA, GMP Compliance)
+    - H3: MOQ, Pricing Structures & Lead Time Breakdown
+  - **H2: Custom OEM/ODM Capabilities: Materials, Tooling & Design**
+    - H3: Best Practices for Private Label & Custom Molding
+  - **H2: Common Pitfalls to Avoid in Overseas Sourcing** (避坑指南与质检要点)
+  - **H2: Frequently Asked Procurement Questions (FAQ)**
+    - H3: What is the average lead time for custom tooling?
+    - H3: How does an airless pump bottle prevent oxidation?
 ```
 
 ---
 
-## 🔑 进阶：直连官方 Google Ads API (每天 15,000 次免费额度)
-
-若你需要官方的**精确月搜索量、真实竞价指数、CPC 出价范围与近 12 个月搜索走势**，可以零成本直连 Google Ads 官方 API：
-
-1. **运行内置交互式配置向导**：
-   ```bash
-   python run.py --setup
-   ```
-   向导会引导你输入自己的 Google Cloud OAuth Client ID / Secret，并自动开启本地监听（`http://127.0.0.1:8787`），浏览器弹出一键授权即可保存长期有效的 `refresh_token`。
-   *(详细自建教程请见 [references/google_cloud_setup_guide.md](references/google_cloud_setup_guide.md))*
-
-2. **直连官方数据分析**：
-   ```bash
-   python run.py "seo audit" --official
-   ```
-
----
-
-## 📁 目录结构
+## 📁 架构与目录
 
 ```text
 google-keyword-planner/
-├── run.py                      # 开源 CLI 主入口 (双模式开箱秒跑)
-├── requirements.txt            # 极简依赖清单
-├── pyproject.toml              # 标准 Python 项目打包配置
-├── keyword_planner/            # 核心业务模块
-│   ├── scraper.py              # Google Suggest 批量拓词引擎 (防跑偏算法)
-│   ├── evaluator.py            # 哥飞 SEO 选词决策引擎 (意图/KD/机会评分)
-│   ├── kgr.py                  # KGR (Keyword Golden Ratio) 金比率分析器
-│   ├── content_generator.py    # 文章选题与 H1/H2/H3 大纲智能生成器
-│   ├── official_ads.py         # Google Ads 官方 REST API 直连模块
-│   └── setup_wizard.py         # 交互式 OAuth 2.0 凭证向导
-├── SKILL.md                    # 兼容 Codex / Claude / Cursor 的 Agent Skill 说明
-├── agents/openai.yaml          # Agent UI 元数据
-└── references/
-    ├── gefei_seo_methodology.md    # 哥飞选词与机会评估方法论深度拆解
-    ├── google_cloud_setup_guide.md # 免费自建 Google Cloud 凭证全流程
-    └── api_errors_and_limits.md    # 常见报错与排错手册
+├── run.py                          # 开源 CLI 主入口 (开箱秒跑)
+├── requirements.txt                # 极简纯净依赖 (零臃肿驱动)
+├── pyproject.toml                  # 标准 Python 模块配置
+├── keyword_planner/                # 核心算法引擎
+│   ├── b2b_config.py               # B2B 工业采购与供应链修饰词库
+│   ├── scraper.py                  # 词边界防跑偏 Google Suggest 引擎
+│   ├── evaluator.py                # 哥飞选词决策与 B2B 采购意图评分
+│   ├── kgr.py                      # KGR (Keyword Golden Ratio) 金比率核算器
+│   ├── content_generator.py        # B2B 采购指南与工艺选型大纲生成器
+│   ├── official_ads.py             # 官方 API 客户端与 Cloudflare 全球网关
+│   └── setup_wizard.py             # 自建官方凭证向导 (可选)
+├── references/
+│   ├── b2b_agency_seo_playbook.md  # 乙方 SEO 操盘 B 端行业实战手册
+│   ├── gefei_seo_methodology.md    # 哥飞选词与机会评估方法论深度拆解
+│   ├── google_cloud_setup_guide.md # 自建 Google 凭证图文教程
+│   └── api_errors_and_limits.md    # 常见报错与排错手册
+└── SKILL.md                        # 兼容 Codex / Claude / Cursor 的 Agent Skill
 ```
 
 ---
 
-## 🤝 贡献与反馈
-
-欢迎提交 PR 或创建 Issue！无论是补充更多的意图词库、优化 KGR 判定模型，还是贡献更多国家地区的语言规则，我们都非常欢迎。
-
 ## 📄 开源许可证
 
-本项目采用 [MIT 许可证](LICENSE)。你可以自由商用、修改和分发，但请保留原作者版权声明。
+本项目采用 [MIT 许可证](LICENSE)。你可以自由商用、集成到 Agency 内部 SOP 工作流或进行二次分发。

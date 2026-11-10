@@ -1,8 +1,8 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
-Google Suggest 核心拓词引擎 (Zero-Token Autocomplete Engine)
-免任何 API Key 或登录凭据，实时从 Google 搜索下拉建议框中批量挖掘长尾搜索词。
+Google Suggest 核心拓词引擎 (带 B2B 采购与工业出海增强算法)
+免任何 API Key，实时从 Google 搜索下拉建议框中批量挖掘长尾搜索词。
 """
 
 import os
@@ -14,6 +14,8 @@ import urllib.request
 import xml.etree.ElementTree as ET
 from typing import List, Set, Dict, Tuple, Callable, Optional
 from concurrent.futures import ThreadPoolExecutor, as_completed
+
+from .b2b_config import B2B_SUPPLY_CHAIN_MODIFIERS, B2B_QUESTION_MODIFIERS
 
 USER_AGENTS = [
     "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/128.0.0.0 Safari/537.36",
@@ -43,6 +45,7 @@ class SuggestScraper:
         hl: str = "en",
         gl: str = "us",
         num_workers: int = 3,
+        enable_b2b: bool = True,
         exclude_words: Optional[List[str]] = None,
         on_progress: Optional[Callable[[int, str], None]] = None,
     ):
@@ -50,10 +53,11 @@ class SuggestScraper:
         self.hl = hl
         self.gl = gl
         self.num_workers = max(1, min(num_workers, 5))
+        self.enable_b2b = enable_b2b
         self.exclude_words = [w.lower() for w in (exclude_words or [])]
         self.on_progress = on_progress
 
-        # 单词边界严格匹配（中英文通用边界处理）
+        # 单词边界正则匹配，防止 substring 误判（杜绝 seo -> seoul）
         if re.match(r'^[a-zA-Z0-9\s]+$', self.seed):
             self.seed_pattern = re.compile(r'\b' + re.escape(self.seed) + r'\b', re.IGNORECASE)
         else:
@@ -63,7 +67,6 @@ class SuggestScraper:
         self.metadata: List[Dict[str, str]] = []
 
     def fetch_suggestions(self, query: str) -> List[str]:
-        """向 Google Suggest 发起请求"""
         url = (
             f"https://suggestqueries.google.com/complete/search?"
             f"output=toolbar&hl={self.hl}&gl={self.gl}&q={urllib.parse.quote(query)}"
@@ -96,38 +99,44 @@ class SuggestScraper:
         return True
 
     def build_queries(self) -> List[Tuple[str, str]]:
-        """构建专业 SEO 拓词查询组合"""
         queries: List[Tuple[str, str]] = []
         queries.append((self.seed, "seed"))
         queries.append((f"{self.seed} ", "seed_space"))
 
-        # A-Z 字母汤拓词
+        # 1. A-Z 字母汤拓词
         for char in ALPHABET:
             queries.append((f"{self.seed} {char}", f"alphabet_suffix_{char}"))
             queries.append((f"{char} {self.seed}", f"alphabet_prefix_{char}"))
         for digit in DIGITS:
             queries.append((f"{self.seed} {digit}", f"digit_{digit}"))
 
-        # 疑问词
+        # 2. 通用疑问词
         for q in QUESTIONS:
             queries.append((f"{q} {self.seed}", f"question_{q}"))
 
-        # 商业与意图修饰词
+        # 3. 通用商业与意图修饰词
         for mod in MODIFIERS:
             queries.append((f"{self.seed} {mod}", f"modifier_suffix_{mod}"))
             queries.append((f"{mod} {self.seed}", f"modifier_prefix_{mod}"))
 
+        # 4. 【核心增强】B2B 供应链、采购与工业工程修饰词
+        if self.enable_b2b:
+            for b2b_mod in B2B_SUPPLY_CHAIN_MODIFIERS:
+                queries.append((f"{self.seed} {b2b_mod}", f"b2b_suffix_{b2b_mod}"))
+                queries.append((f"{b2b_mod} {self.seed}", f"b2b_prefix_{b2b_mod}"))
+            for b2b_q in B2B_QUESTION_MODIFIERS:
+                queries.append((f"{b2b_q} {self.seed}", f"b2b_question_{b2b_q}"))
+
         return queries
 
     def harvest(self) -> List[Dict[str, str]]:
-        """执行多线程抓取并去重"""
         planned_queries = self.build_queries()
         count = 0
 
         with ThreadPoolExecutor(max_workers=self.num_workers) as executor:
             future_to_info = {}
             for query, source_type in planned_queries:
-                time.sleep(random.uniform(0.08, 0.2))
+                time.sleep(random.uniform(0.08, 0.18))
                 future = executor.submit(self.fetch_suggestions, query)
                 future_to_info[future] = (query, source_type)
 
