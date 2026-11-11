@@ -59,7 +59,7 @@ def generate_content_plan(
     plan_md.append("\n" + "-" * 70 + "\n")
 
     # ---------------- 方案二：工程选型与工艺参数对比 (Technical Specs & Material Guide) ----------------
-    tech_kw = specs_kws[0]["keyword"] if specs_kws else (comm_kws[0]["keyword"] if comm_kws else high_score_kws[1]["keyword"])
+    tech_kw = specs_kws[0]["keyword"] if specs_kws else (comm_kws[0]["keyword"] if comm_kws else (high_score_kws[1]["keyword"] if len(high_score_kws) > 1 else high_score_kws[0]["keyword"]))
     plan_md.append("## 📌 方案二：工程选型与材质工艺技术长文 (Technical Specification Guide)")
     plan_md.append(f"- **目标主词**：`{tech_kw}`")
     plan_md.append(f"- **建议文章 H1 标题**：`{seed_keyword.title()} Specifications & Selection Guide: Materials, Engineering Process & Comparison`")
